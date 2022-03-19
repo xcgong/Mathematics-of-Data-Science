@@ -1,0 +1,66 @@
+%\documentclass{article}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+%\usepackage[]{amsthm} %lets us use \begin{proof}
+%\usepackage[]{amssymb} %gives us the character \varnothing
+%\usepackage{verbatim}
+
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,latexsym}
+\usepackage{mathrsfs,mathtools}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage{bm}
+\usepackage{natbib}
+\usepackage{subfigure,multirow}
+\usepackage[colorlinks,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+\usepackage{verbatim}
+
+\renewcommand\baselinestretch{1.25}
+\topmargin -.5in
+\textheight 9in
+\textwidth 6.6in
+\oddsidemargin -.25in
+\evensidemargin -.25in
+
+\title{Solutions to Homework 2}
+\author{Xiaochuan Gong}
+\date{March 11, 2022}
+%This information doesn't actually show up on your document unless you use the maketitle command below
+
+\begin{document}
+\maketitle %This command prints the title based on information entered above
+
+\subsection*{Problem 1}
+For a function $f: {\mathbb R}^n \rightarrow {\mathbb R}\cup\{-\infty, +\infty\}$ the following statements are equivalent:
+
+\noindent (a) $f$ is closed
+
+\noindent (b) $C_\alpha$ is closed for any $\alpha$
+
+\noindent (c) $f$ is lower-semicontinous over ${\mathbb R}^n$
+\begin{proof}
+(a)$\Rightarrow$(b) Let $\alpha$ be any scalar and consider $C_\alpha$. If $C_\alpha=\emptyset$, then $C_\alpha$ is closed. Suppose now that $C_\alpha\neq\emptyset$. Pick $\{x_k\}\subset C_\alpha$ such that $x_k \rightarrow \bar x$ for some $\bar x \in {\mathbb R}^n$. We have $f(x_k)\leq\alpha$ for all $\alpha$, implying that $(x_k, \alpha)\in \mathrm{epi}(f)$ for all $\alpha$. Since $(x_k, \alpha) \rightarrow (\bar x, \alpha)$ and $\mathrm{epi}(f)$ is closed, it follows that $(\bar x, \alpha) \in \mathrm{epi}(f)$. Consequently $f(\bar x)\leq\alpha$, showing that $\bar x \in C_\alpha$. Hence $C_\alpha$ is closed for any $\alpha$.\\
+
+\noindent (b)$\Rightarrow$(c) Let $x_0 \in {\mathbb R}^n$ be arbitary and let $\{x_k\}$ ba a sequence such that $x_k \rightarrow x_0$. To arrive at a contradiction, assume that $f$ is not lower-semicontinous at $x_0$, i.e.,
+$$\mathop{\lim\inf}\limits_{k \rightarrow \infty} f(x_k) < f(x_0).$$
+Then, there exist a scalar $\beta$ and a subsequence $\{x_{k_j}\}\subset \{x_k\}$ such that
+$$f(x_{k_j})\leq\beta < f(x_0),$$
+yielding that $\{x_{k_j}\} \subset C_\beta$. Since $x_k \rightarrow x_0$, then $x_{k_j}\rightarrow x_0$. Note that the set $C_\beta$ is closed, it follows that $x_0 \in C_\beta$. Hence, $f(x_0)\leq\beta$, a controdiction arrives. Thus, we must have
+$$f(x_0)\leq\mathop{\lim\inf}\limits_{k \rightarrow \infty} f(x_k).$$
+\\
+\noindent (c)$\Rightarrow$(a) To arrive at a controdiction we assume that $\mathrm{epi}(f)$ is not closed. Then, there exists a sequence $\{(x_k, t_k)\}\subset \mathrm{epi}(f)$ such that 
+$$(x_k, t_k) \rightarrow (\bar x, \bar t) \quad\text{and}\quad (\bar x, \bar t) \notin \mathrm{epi}(f).$$
+Since $(x_k, t_k) \in \mathrm{epi}(f)$ for all $k$, we have
+$$f(x_k) \leq t_k, \forall k.$$
+Taking the limit inferior as $k \rightarrow \infty$, and using $t_k \rightarrow \bar t$, we obtain
+$$\mathop{\lim\inf}\limits_{k \rightarrow \infty} f(x_k) \leq \lim\limits_{k \rightarrow \infty} t_k = \bar t.$$
+Since $(\bar x, \bar t) \notin \mathrm{epi}(f)$, we have $f(\bar x) > \bar t$, implying that
+$$\mathop{\lim\inf}\limits_{k \rightarrow \infty} f(x_k) \leq \bar t < f(\bar x).$$
+On the other hand, because $x_k \rightarrow \bar x$, and $f$ is lower-semicontinous at $\bar x$, we have
+$$\mathop{\lim\inf}\limits_{k \rightarrow \infty} f(x_k)\geq f(\bar x),$$
+a controdiction arrives. Hence, $\mathrm{epi}(f)$ must be closed.
+
+\end{proof}
+
+\end{document}
