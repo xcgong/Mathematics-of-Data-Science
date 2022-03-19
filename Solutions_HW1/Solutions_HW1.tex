@@ -1,0 +1,138 @@
+%\documentclass{article}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+%\usepackage[]{amsthm} %lets us use \begin{proof}
+%\usepackage[]{amssymb} %gives us the character \varnothing
+%\usepackage{verbatim}
+
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,latexsym}
+\usepackage{mathrsfs,mathtools}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage{bm}
+\usepackage{natbib}
+\usepackage{subfigure,multirow}
+\usepackage[colorlinks,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+\usepackage{verbatim}
+
+\renewcommand\baselinestretch{1.25}
+\topmargin -.5in
+\textheight 9in
+\textwidth 6.6in
+\oddsidemargin -.25in
+\evensidemargin -.25in
+
+\title{Solutions to Homework 1}
+\author{Xiaochuan Gong}
+\date{March 4, 2022}
+%This information doesn't actually show up on your document unless you use the maketitle command below
+
+\begin{document}
+\maketitle %This command prints the title based on information entered above
+
+\subsection*{Problem 1}
+\textbf{(The Courant-Fischer Theorem for Singular Values).} Suppose $A \in {\mathbb R}^{m\times n}$ has sigular values $\sigma_1,\dots, \sigma_n$ ordered so that $\sigma_1\geq \sigma_2\geq \dots \geq \sigma_n$. Then for $k=1,\dots,n$:
+
+\noindent(1)$\sigma_k=\max \limits_{S\subseteq R^n,dim(S)=k}\ \min \limits_{v,||v||=1,v\in S} ||Av||,$
+
+\noindent(2)$\sigma_k=\min \limits_{S\subseteq R^n,dim(S)=n-k+1}\ \max \limits_{v,||v||=1,v\in S} ||Av||.$
+\begin{proof}
+(1)Before starting the proof, we denote $\{u_1,\dots,u_n\}$ orthonormal as the eigenvectors of $A'A$ corresponding to ${\sigma_1}^2, {\sigma_2}^2, \dots, {\sigma_n}^2$ respectively.
+
+First, let $W=span\{u_k,\dots,u_n\}$, then $dim(W)=n-k+1$. So for any $k$-dimensional subspace S, we should have $dim(W\cap S)\geq 1$. This is because of the equality: $dim(W\cup S)=dim(W)+dim(S)-dim(W\cap S)$ and of course $dim(W\cup S)\leq n$, thus $dim(W\cap S)\geq 1$.
+
+Now, choose any $v\in W\cap S$ and $||v||=1$, note that $v=\sum\limits_{j=k}^n \langle v,u_j\rangle u_j$, $A'Au_j =\sigma_j^2 u_j$, and
+$||Av||^2 = \langle Av, Av\rangle  = \langle v, A'Av\rangle  = \langle A'Av, v\rangle $, then it follows that
+\begin{equation*}
+  \begin{aligned}
+  ||Av||^2&= \langle A'Av, v\rangle \\
+  &=\langle \sum\limits_{j=k}^n \langle v,u_j\rangle \sigma_j^2 u_j, v\rangle \\
+  &=\sum\limits_{j=k}^n \sigma_j^2\langle v,u_j\rangle \langle u_j, v\rangle \\
+  &=\sum\limits_{j=k}^n \sigma_j^2|\langle v,u_j\rangle |^2\\
+  &\leq \sigma_k^2.
+  \end{aligned}
+\end{equation*}
+Here we use the fact that $\sigma_k\geq\dots\geq\sigma_n$, and $\sum\limits_{j=k}^n |\langle v,u_j\rangle |^2=||v||^2=1$. Since $||Av||^2\leq\sigma_k^2$, then $||Av||\leq\sigma_k$. Thus for any $k$-dimensional subspace S, $$ \inf \limits_{v,||v||=1,v\in S} ||Av|| \leq \sigma_k,$$
+and since $\{v \in S: ||v||=1\}$ is compact, infimum is attained. So we have $$\min \limits_{v,||v||=1,v\in S} ||Av|| \leq \sigma_k.$$
+Since it holds for any $k$-dimensional subspace $S$, thus $$\sup \limits_{S\subseteq R^n,dim(S)=k}\ \min \limits_{v,||v||=1,v\in S} ||Av||\leq\sigma_k.$$
+
+On the other hand, consider a particular $k$-dimensional subspace $S^\star=span\{u_1, \dots u_k\}$, then for any $v \in S^\star, ||v||=1$,
+\begin{equation*}
+  \begin{aligned}
+  ||Av||^2 &=\sum\limits_{j=1}^k \sigma_j^2|\langle v,u_j\rangle |^2\\
+  &\geq \sigma_k^2.
+  \end{aligned}
+\end{equation*}
+Hence, we obtain $\min \limits_{v,||v||=1,v\in S^\star} ||Av||\geq\sigma_k$. In particular, if we choose $v=u_k$, then $||Av||=||Au_k||=\sigma_k$, thus $\min \limits_{v,||v||=1,v\in S^\star} ||Av||=\sigma_k$. Therefore, we have $$\sup \limits_{S\subseteq R^n,dim(S)=k}\ \min \limits_{v,||v||=1,v\in S} ||Av||\geq\sigma_k,$$
+so we get $$\sup \limits_{S\subseteq R^n,dim(S)=k}\ \min \limits_{v,||v||=1,v\in S} ||Av||=\sigma_k.$$
+
+Note that for $S=S^\star$, the supremum over all $k$-dimensional subspace $S$ is attained, and finally we conclude that
+$$\sigma_k=\max \limits_{S\subseteq R^n,dim(S)=k}\ \min \limits_{v,||v||=1,v\in S} ||Av||.$$
+\\
+
+\noindent(2)The proof of this formula follows the same idea as (1) and we shall omit the similar details. We first choose $W=span\{u_1,\dots,u_k\}$, so $dim(W)=k$. Then for any $(n-k+1)$-dimensional subspace $S$, $dim(W\cap S)\geq 1$.
+
+Next, choose any $v\in W\cap S$ and $||v||=1$, we obtain $||Av||\geq\sigma_k$, and therefore 
+$$\max \limits_{v,||v||=1,v\in S} ||Av||\geq\sigma_k.$$
+
+Now, we again choose a particular $S^* = span\{u_k,\dots,u_n\}$, and this gives
+$$\inf \limits_{S\subseteq R^n,dim(S)=n-k+1}\ \max \limits_{v,||v||=1,v\in S} ||Av|| = \sigma_k.$$
+
+Note that for $S=S^*$, infimun is attained, and finally we conclude that $$\sigma_k=\min \limits_{S\subseteq R^n,dim(S)=n-k+1}\ \max \limits_{v,||v||=1,v\in S} ||Av||.$$
+
+\end{proof}
+
+\subsection*{Problem 2}
+\textbf{(Principal Component Analysis).} Suppose we have data $x_1,\dots,x_n$ with each $x_i\in {\mathbb R}^d$ and $d$ is huge, find the optimal linear encoder $E \in {\mathbb R}^{s\times d}$ and linear decoder $D\in {\mathbb R}^{d\times s}$ with $s\ll d$ that minimize the reconstruction loss
+$${\mathcal L}(E,D)=\frac{1}{n}\sum\limits_{i=1}^{n}||x_i-DEx_i||^2.$$
+
+\begin{proof}
+We devide the proof into three parts. For the first part, we'll show the columns of optimal linear decoder $D$ are orthonormal and $E=D'$; for the second part, we'll find an equivalent equation to optimize; for the third part, we'll illustrate that the solution to the PCA problem is to set $D$ to be the matrix whose columns are $u_1,\dots,u_s$ and to set $E=D'$, where $u_1,\dots,u_s$ are eigenvectors of the matrix $A\coloneqq\sum\limits_{i=1}^{n}x_ix_i'$ corresponding to the largest $s$ eigenvalues of $A$.
+\\
+
+Fix any $D,E$ and denote $R=\{DEx:x\in {\mathbb R}^d\}$, then $R$ is an $s$-dimensional linear subspace of ${\mathbb R}^d$. Let $V\in {\mathbb R}^{d\times s}$ be a matrix whose columns form an orthonormal basis of this subspace, namely, the range of $V$ is $R$ and $V'V=I_s$. Therefore, each vector in $R$ can be written as $Vy$ where $y\in {\mathbb R}^s$. For every $x\in {\mathbb R}^d$ and $y\in {\mathbb R}^s$ we have
+\begin{equation*}
+  \begin{aligned}
+  ||x-Vy||^2&=x'x+y'V'Vy-2y'V'x\\
+  &=||x||^2+||y||^2-2y'(V'x).
+  \end{aligned}
+\end{equation*}
+Let $\frac{\partial ||x-Vy||^2}{\partial y}=0$, we obtain $y=V'x$. Therefore, for each $x$ we have that
+$$VV'z=\mathop{\arg\min}\limits_{z\in R}||x-z||^2.$$
+In particular this holds for $x_1,\dots,x_n$ and therefore we can replace $D,E$ by $V,V'$ and by that do not increase the objective $$\sum\limits_{i=1}^{n}||x_i-DEx_i||^2\geq\sum\limits_{i=1}^{n}||x_i-VV'x_i||^2.$$
+Since this holds for every $D,E$, it follows that the columns of optimal linear decoder $D$ are orthonormal and $E=D'$.
+\\
+
+On the basis of the preceding proof, we can rewrite the optimization problem as follows:
+$$\mathop{\arg\min}\limits_{D\in{\mathbb R}^{d\times s}:D'D=I_s}\sum\limits_{i=1}^{n}||x_i-DD'x_i||^2.$$
+Then for every $x\in {\mathbb R}^d$ we have
+\begin{equation*}
+  \begin{aligned}
+  ||x-DD'x||^2&=x'x-2x'D'Dx+x'DD'DD'x\\
+  &=||x||^2-x'DD'x\\
+  &=||x||^2-tr(x'DD'x)\\
+  &=||x||^2-tr(D'xx'D).
+  \end{aligned}
+\end{equation*}
+Since trace is a linear operator, therefore
+$$\sum\limits_{i=1}^{n}||x_i-DD'x_i||^2=\sum\limits_{i=1}^{n}||x_i||^2-tr(D'\sum\limits_{i=1}^{n}x_ix_i'D).$$
+Then it allows us to rewrite the problem as follows:
+$$\mathop{\arg\max}\limits_{D\in{\mathbb R}^{d\times s}:D'D=I_s}tr(D'\sum\limits_{i=1}^{n}x_ix_i'D).$$
+\\
+
+Let $A=\sum\limits_{i=1}^{n}x_ix_i'$, $u_1,\dots,u_s$ be eigenvectors of the matrix $A$ corresponding to the largest $s$ eigenvalues of $A$, and $P\Lambda P'$ be the spectral decomposition of A. In fact, $P\Lambda P'$ is also the SVD of $A$ since A is symmetric. Fix some $D\in {\mathbb R}^{d\times s}$ with orthonormal columns and let $B=P'D$. Then, $PB=PP'D=D$, $D'AD=B'P'P\Lambda P'PB=B'\Lambda B$, therefore, 
+$$tr(D'AD)=\sum\limits_{j=1}^{d}\Lambda_{j,j}\sum\limits_{i=1}^{s}{B_{j,i}}^2.$$
+Note that $B'B=D'PP'D=I_s$. Therefore, the columns of $B$ are orthonormal, then 
+$\sum\limits_{j=1}^{d}\sum\limits_{i=1}^{s}{B_{j,i}}^2=s$.
+In addition, let $\tilde B\in{\mathbb R}^{d\times d}$ be a matrix such that its first $s$ columns are the columns of $B$ and that ${\tilde B}'\tilde B=I_d$. Then, for every $j$ we have $\sum\limits_{i=1}^{d}{{\tilde B}_{j,i}}^2=1$, which implies that $\sum\limits_{i=1}^{s}{B_{j,i}}^2=\sum\limits_{i=1}^{s}{{\tilde B}_{j,i}}^2\leq1$. Let $\beta=(\beta_1,\dots,\beta_d)$, it follows that 
+$$tr(D'AD)\leq\max\limits_{\beta\in[0,1]^d:||\beta||_1= s}\sum\limits_{j=1}^{d}\Lambda_{j,j}\beta_j.$$
+We can verify the right-hand side equals $\sum\limits_{j=1}^{s}\Lambda_{j,j}$. Thus for every $D\in {\mathbb R}^{d\times s}$, $tr(D'AD)\leq\sum\limits_{j=1}^{s}\Lambda_{j,j}$. In particular, if we set $D$ to be the matrix whose columns sre the $s$ leading eigenvectors of $A$, we obtain that $tr(D'AD)=\sum\limits_{j=1}^{s}\Lambda_{j,j}$. In other words, $D=(u_1,\dots,u_s)$ enables $tr(D'AD)$ attain the upper bound, and this concludes our proof.
+
+
+
+\end{proof}
+
+
+
+\end{document}
