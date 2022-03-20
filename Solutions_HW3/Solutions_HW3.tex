@@ -1,0 +1,137 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,latexsym}
+\usepackage{mathrsfs,mathtools}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage{bm}
+\usepackage{natbib}
+\usepackage{subfigure,multirow}
+\usepackage[colorlinks,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+\usepackage{verbatim}
+
+\renewcommand\baselinestretch{1.25}
+\topmargin -.5in
+\textheight 9in
+\textwidth 6.6in
+\oddsidemargin -.25in
+\evensidemargin -.25in
+
+\title{Solutions to Homework 3}
+\author{Xiaochuan Gong}
+\date{March 18, 2022}
+
+\begin{document}
+\maketitle
+
+\subsection*{Problem 1}
+Compute the subdifferential $\partial f$ with $f(x)=||x||_1$.
+
+\begin{proof}
+The $\ell_1$-norm 
+\[
+f(x)=||x||_1=\sum\limits_{i=1}^{n}|x_i|
+\]
+can be expresses as summation of convex functions, $i.e.$, $f(x) = \sum\limits_{i=1}^{n}f_i(x)$, where $f_i(x) = |x_i| = \text{sign}(x_i)\cdot x_i$. Therefore, we can use the summation formula to compute the subdifferential. We have 
+\begin{equation*}
+    \begin{aligned}
+        f(x) & =\sum\limits_{i=1}^{n}\partial f_i(x) \\
+             & =\sum\limits_{i\in\{j\,:\, x_j\neq0\}}\text{sign}(x_i)\cdot e_i+ \sum\limits_{i\in\{j\,:\,x_j=0\}}[-e_i, e_i]\\
+             & =\left\{g=(g_1,\dots,g_n)^{T}:\, g_i=\text{sign}(x_i)
+             \ \text{if}\ x_i\neq0, \ \text{and}\ [-1,1]\ \text{otherwise}\right\}\\
+    \end{aligned}
+\end{equation*}
+
+\end{proof}
+
+\subsection*{Problem 2}
+Compute the subdifferential $\partial f$ with $f(x)=||x||_2$.
+
+\begin{proof}
+The $\ell_2$-norm 
+\[
+f(x) = ||x||_2 = \left(\sum\limits_{i=1}^{n}|x_i|^2\right)^{\frac{1}{2}}
+\]
+is convex and differentiable away from 0, therefore, 
+\[
+\partial f(x) = \nabla f(x) = \frac{x}{||x||_2}, \ \forall x \neq 0.
+\]
+Now we compute the subdifferential at $x=0$. For any $g$ and $||g||_2\leq1$, by Cauchy-Schwarz inequality we have
+\[
+g^{T}(x-0)\leq||g||_2||x||_2 \leq ||x||_2-0,
+\]
+therefore we obtain
+\[
+\{g\,|\,||g||_2 \leq 1\} \subseteq \partial f(0).
+\]
+Next we will show that $g \notin \partial f(0)$ if $||g||_2 > 1$. Let $x=g$, if $g$ is a subgradient, then
+\[
+||g||_2-0\geq g^{T}(g-0) = ||g||_2^2 > ||g||_2,
+\]
+thus a controdiction arrives. Therefore $\partial f(0) = \{g\, :\, ||g||_2 \leq 1\}.$ Hence, 
+\begin{equation*}
+	\partial f(x) = \begin{cases}
+	 	\frac{x}{||x||_2}          & x \neq 0 \\
+		\{g\, :\, ||g||_2 \leq 1\} & x=0.     \\
+	\end{cases}
+\end{equation*}
+\end{proof}
+
+\subsection*{Problem 3}
+Compute the subdifferential $\partial f$ with $f(x) = ||x||_\infty$.
+
+\begin{proof}
+The $\ell_\infty$-norm
+\[
+f(x) = ||x||_\infty = \text{max}\{|x_1|,\dots,|x_n|\}
+\]
+can be expresses as maximum of convex functions, $i.e.$, $f(x) = \text{max}\{f_1(x),\dots,f_n(x)\}$, where $f_i(x) = |x_i|$. Using
+\begin{equation*}
+    \partial f_i(x)= 
+    \begin{cases}
+        [-1,1]  & x_i=0,\\
+        \{1\}   & x_i>0,\\
+        \{-1\}  & x_i<0.\\
+    \end{cases}
+\end{equation*}
+and pointwise maximum formula for computing subdifferential, we have
+\[
+\partial f(x) = \textbf{conv}\left(\cup\limits_{i \in I(x)}\{\partial f_i(x)\}\right)=\left(\sum\limits_{i\in I(x)} \theta_i \cdot \partial f_i(x)\,:\,\sum\limits_{i\in I(x)} \theta_i=1,\,\theta_i \geq 0,\,i \in I(x)\right),
+\]
+where $I(x) = \{i\,:\,f_i(x)=f(x)\}$.
+
+\end{proof}
+
+\subsection*{Problem 4}
+Compute the subdifferential $\partial f$ with $f(x)=||X||_\star$, where $||X||_\star$ is the nuclear norm of matrix $X$.
+
+\begin{proof}
+Let $X\in\mathbb{R}^{m\times n}$ be a matrix of rank $r$. Recall the nuclear norm $||X||_\star = \sum\limits_{i=1}^{r}\sigma_i$, and the spectral norm $||X||_\star = \sigma_1$. Let $X = U\Sigma V^{T}$ be the SVD, so that $U\in\mathbb{R}^{m \times r}, \Sigma\in\mathbb{R}^{r \times r}$ and $V\in\mathbb{R}^{n \times r}.$ Next we will prove that
+\begin{equation}
+    \label{4.1}\tag{4.1}
+    \partial||X||_\star = \left\{UV^{T} + W\ | \ U^{T}W = 0, WV = 0, ||W||_2 \leq 1\right\}.
+\end{equation}
+Let $Z = UV^{T} + W$ with $W$ as in \eqref{4.1}, and fix an arbitary $Y$. Then we have
+\[
+||X||_\star + \langle Z,Y-X \rangle = \langle Z,Y \rangle \leq ||Z||_2||Y||_\star \leq ||Y||_\star
+\]
+where the first equality uses $\langle Z,X \rangle = ||X||_\star$, the second inequality uses the Von-Neumann trace inequality and H\"{o}lder's inequality, and the last inequality uses $||Z||_2 \leq 1$, which holds by the definition \eqref{4.1}. This proves the $\supseteq$ containment.\\
+
+\noindent For the other direction, fix $Z \in \partial ||X||_\star$. Let $||\cdot||_\star^{\star}$ denote the convex conjugate of $||\cdot||_\star$
+\[
+||Z||_\star^{\star} \coloneqq \sup\limits_{Y} \langle Z,Y \rangle - ||Y||_\star.
+\]
+Note that again by the Von-Neumann trace inequality and H\"{o}lder's inequality, we can say
+\begin{equation}
+    \label{4.2}\tag{4.2}
+    ||Z||_\star^{\star} \leq \sup\limits_{Y}(||Z||_2-1)||Y||_\star = 
+    \begin{cases}
+        \infty & ||Z||_2\geq1,    \\
+        0      & \text{otherwise}.\\
+    \end{cases}
+\end{equation}
+Furthermore, the upper bound can always be achieved by choosing $Y$ to be rank one with top-1 left and right singular vectors equal to those of $Z$. So, \eqref{4.2} is in fact an equality. Now by a fundamental property of the convex conjugate, we know that $\langle Z,X \rangle = ||X||_\star + ||Z||_\star^{\star}$, which implies $||Z||_\star = 0$, hence $||Z||_2 \leq 1$ and $\langle Z,X \rangle = ||X||_\star$. Applying the Von-Neumann trace inequality once more, we know $\langle Z,X \rangle$ only if $Z = UV^{T} + W$ as in \eqref{4.1}. Therefore, the $\subseteq$ containment also holds. 
+ 
+\end{proof}
+
+
+\end{document}
