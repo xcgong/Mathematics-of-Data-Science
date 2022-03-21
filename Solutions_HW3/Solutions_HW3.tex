@@ -1,0 +1,195 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,latexsym}
+\usepackage{mathrsfs,mathtools}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage{bm}
+\usepackage{natbib}
+\usepackage{subfigure,multirow}
+\usepackage[colorlinks,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+\usepackage{verbatim}
+
+\renewcommand\baselinestretch{1.25}
+\topmargin -.5in
+\textheight 9in
+\textwidth 6.6in
+\oddsidemargin -.25in
+\evensidemargin -.25in
+
+\title{Solutions to Homework 3}
+\author{Xiaochuan Gong}
+\date{March 18, 2022}
+
+\begin{document}
+\maketitle
+
+\subsection*{Problem 1}
+Compute the subdifferential $\partial f$ with $f(x)=||x||_1$.
+
+\begin{proof}
+The $\ell_1$-norm 
+\[
+f(x)=||x||_1=\sum\limits_{i=1}^{n}|x_i|
+\]
+can be expresses as summation of convex functions, $i.e.$, $f(x) = \sum\limits_{i=1}^{n}f_i(x)$, where $f_i(x) = |x_i| = \text{sign}(x_i)\cdot x_i$. Therefore, we can use the summation formula to compute the subdifferential. We have 
+\begin{equation*}
+    \begin{aligned}
+        f(x) & =\sum\limits_{i=1}^{n}\partial f_i(x) \\
+             & =\sum\limits_{i\in\{j\,:\, x_j\neq0\}}\text{sign}(x_i)\cdot e_i+ \sum\limits_{i\in\{j\,:\,x_j=0\}}[-e_i, e_i]\\
+             & =\left\{g=(g_1,\dots,g_n)^{T}:\, g_i=\text{sign}(x_i)
+             \ \text{if}\ x_i\neq0, \ \text{and}\ [-1,1]\ \text{otherwise}\right\}\\
+    \end{aligned}
+\end{equation*}
+
+\end{proof}
+
+\subsection*{Problem 2}
+Compute the subdifferential $\partial f$ with $f(x)=||x||_2$.
+
+\begin{proof}
+The $\ell_2$-norm 
+\[
+f(x) = ||x||_2 = \left(\sum\limits_{i=1}^{n}|x_i|^2\right)^{\frac{1}{2}}
+\]
+is convex and differentiable away from 0, therefore, 
+\[
+\partial f(x) = \nabla f(x) = \frac{x}{||x||_2}, \ \forall x \neq 0.
+\]
+Now we compute the subdifferential at $x=0$. For any $g$ and $||g||_2\leq1$, by Cauchy-Schwarz inequality we have
+\[
+g^{T}(x-0)\leq||g||_2||x||_2 \leq ||x||_2-0,
+\]
+therefore we obtain
+\[
+\{g\,|\,||g||_2 \leq 1\} \subseteq \partial f(0).
+\]
+Next we will show that $g \notin \partial f(0)$ if $||g||_2 > 1$. Let $x=g$, if $g$ is a subgradient, then
+\[
+||g||_2-0\geq g^{T}(g-0) = ||g||_2^2 > ||g||_2,
+\]
+thus a controdiction arrives. Therefore $\partial f(0) = \{g\, :\, ||g||_2 \leq 1\}.$ Hence, 
+\begin{equation*}
+	\partial f(x) = \begin{cases}
+	 	\frac{x}{||x||_2}          & x \neq 0 \\
+		\{g\, :\, ||g||_2 \leq 1\} & x=0.     \\
+	\end{cases}
+\end{equation*}
+\end{proof}
+
+\subsection*{Problem 3}
+Compute the subdifferential $\partial f$ with $f(x) = ||x||_\infty$.
+
+\begin{proof}
+The $\ell_\infty$-norm
+\[
+f(x) = ||x||_\infty = \text{max}\{|x_1|,\dots,|x_n|\}
+\]
+can be expresses as maximum of convex functions, $i.e.$, $f(x) = \text{max}\{f_1(x),\dots,f_n(x)\}$, where $f_i(x) = |x_i|$. Using
+\begin{equation*}
+    \partial f_i(x)= 
+    \begin{cases}
+        [-1,1]  & x_i=0,\\
+        \{1\}   & x_i>0,\\
+        \{-1\}  & x_i<0.\\
+    \end{cases}
+\end{equation*}
+and pointwise maximum formula for computing subdifferential, we have
+\[
+\partial f(x) = \textbf{conv}\left(\cup\limits_{i \in I(x)}\{\partial f_i(x)\}\right)=\left(\sum\limits_{i\in I(x)} \theta_i \cdot \partial f_i(x)\,:\,\sum\limits_{i\in I(x)} \theta_i=1,\,\theta_i \geq 0,\,i \in I(x)\right),
+\]
+where $I(x) = \{i\,:\,f_i(x)=f(x)\}$.
+
+\end{proof}
+
+\subsection*{Problem 4}
+Compute the subdifferential $\partial f$ with $f(A)=||A||_\star$, where $||A||_\star$ is the nuclear norm of matrix $A$.
+
+\begin{proof}
+Let $A\in\mathbb{R}^{m\times n}$ be a matrix of rank $r$. Recall the nuclear norm $||A||_\star = \sum\limits_{i=1}^{r}\sigma_i$, and the spectral norm $||A||_\star = \sigma_1$. Let $A = U\Sigma V^{T}$ be the SVD, so that $U\in\mathbb{R}^{m \times r}, \Sigma\in\mathbb{R}^{r \times r}$ and $V\in\mathbb{R}^{n \times r}.$ We will now prove its subdifferential is
+\begin{equation}
+    \label{4.1}\tag{4.1}
+    \partial||A||_\star = \left\{UV^{T} + W\ | \ U^{T}W = 0, WV = 0, ||W||_2 \leq 1, W\in\mathbb{R}^{m\times n}\right\}.
+\end{equation}
+First, the key insight is that, at each $A$, the subdifferential of the nuclear norm admits a subspace $\mathcal{T}$ upon which it can be 'decomposed', $i.e.$, 
+\[
+\mathcal{T} = \left\{UY^{T} + XV^{T} : X\in\mathbb{R}^{m\times r}, Y\in\mathbb{R}^{n\times r}\right\} \cap \left\{\text{matrices with orthonormal rows}\right\}.
+\]
+It turns out that $\Pi_{\mathcal{T}}(A) = UV^{T}$. Now we use the theorem that two matrices $A$ and $B$ are orthogonal if and only if $\forall\mu : ||A+\mu B||\geq ||A||$. Thus we have:
+\begin{equation*}
+    \begin{aligned}
+        ||UY^{T}+XV^{T}+\mu W||^2 & = ||UY^{T}+XV^{T}||^2 + 2\mu||\langle UY^{T},W                              \rangle+\langle XV^{T},W \rangle|| + \mu^2||W||^2 \\
+                                  & = ||UY^{T}+XV^{T}||^2 + 
+                                  2\mu[tr(W^{T}UY^{T}+XV^{T}W^{T})] + \mu^2||W||^2 \\
+                                  & = ||UY^{T}+XV^{T}||^2 + \mu^2||W||^2 \\
+                                  & \geq ||UY^{T}+XV^{T}||^2. \\
+    \end{aligned}
+\end{equation*}
+Hence $\mathcal{T}, W$ are orthogonal.
+
+\noindent Using the above results, we can set $Z = UV^{T}+W$, and rewrite \eqref{4.1} as:
+\begin{equation}
+    \label{4.2}\tag{4.2}
+    \partial||A||_\star = \left\{Z : \Pi_{\mathcal{T}}(Z)=UV^{T}, ||\Pi_{\mathcal{T}^\perp}(Z)||_2\leq 1\right\}.
+\end{equation}
+In Particular, the dual norm
+\[
+||Z||_\star^{\star} = \max\limits_{||A||_\star\leq 1} \langle Z,A \rangle
+\]
+can be used to rewrite the subdifferential as 
+\begin{equation}
+    \label{4.3}\tag{4.3}
+    \partial||A||_\star = \left\{Z : \langle Z,A \rangle = ||A||_\star, ||Z||_\star^{\star}\leq 1\right\}.
+\end{equation}
+That follows from applying the subdifferential calculus to the standard subgradient definition. Since the spectral and nuclear are dual from one another, we can again rewrite \eqref{4.3} as:
+\begin{equation}
+    \label{4.4}\tag{4.4}
+    \partial||A||_\star = \left\{Z : \langle Z,A \rangle = ||A||_\star, ||Z||_2\leq 1\right\}.
+\end{equation}
+We can complete the proof by showing that \eqref{4.2} and \eqref{4.4} contain one another. First we show that any $A$ satisfying \eqref{4.2} satisfies $\langle Z,A \rangle = ||X||_\star$. By applying $U^{T}U=I$ and $V^{T}V=I$, we obtain
+\begin{equation*}
+    \begin{aligned}
+        \langle Z,A \rangle & = \langle UV^{T}+W, U\Sigma V^{T} \rangle \\
+                            & = \langle UV^{T}, U\Sigma V^{T} \rangle + \langle W, U\Sigma V^{T} \rangle\\
+                            & = tr(UV^{T}V\Sigma U^{T}) \\
+                            & = tr(V^{T}V\Sigma U^{T}U) \\
+                            & = tr(\Sigma) \\
+                            & = ||X||_\star. \\
+    \end{aligned}
+\end{equation*}
+Then we show that any $Z$ satisfying \eqref{4.2} satisfies $||Z||_2\leq 1$. This is equivalent to showing that:
+\[
+\max\limits_{x\neq 0}\frac{||Zx||}{||x||} \leq 1,
+\]
+or equivalently, 
+\[
+||Zx||^2 \leq ||x||^2, \ \forall x\neq 0.
+\]
+We will bound the left handside. 
+\begin{equation*}
+    \begin{aligned}
+        ||Zx||^2 & = x^{T}(UV^{T}+W)^{T}(UV^{T}+W)x^{T} \\
+                 & = x^{T}(VU^{T}UV^{T})x + x^{T}UV^{T}Wx + x^{T}WUV^{T}x + x^{T}W^{T}Wx \\
+    \end{aligned}
+\end{equation*}
+Note that we can decompose $x$ into $x_1$ and $x_2$ such that $x = x_1+x_2$ and $x_1$ is orthogonal to the rows of $W^{T}$, and $x_2$ is orthogonal to the rows of $V^{T}$ (since $W$ and $V^{T}$ are mutually orthogonal). Then the above expression is equal to:
+\begin{equation*}
+    \begin{aligned}
+        & = x_1^{T}(VV^{T})x_1 + x_2^{T}W^{T}Wx_2 \\
+        & = ||V^{T}x_1||^2 + ||Wx_2||^2 \\
+    \end{aligned}
+\end{equation*}
+Note that $V$ is an orthonormal matrix, so multiplying $x_1$ by it does not affect its norm. Furthermore, since the norm is bounded by 1, we have that for any $x_2$, $||Wx_2||\leq ||W||||x_2||\leq |||x_2||$. Hence:
+\begin{equation*}
+    \begin{aligned}
+        & = ||x_1||^2 + ||x_2||^2 \\
+        & = ||x||^2. \\
+    \end{aligned}
+\end{equation*}
+So now we have proved that any $Z$ satisfying \eqref{4.2} satisfies \eqref{4.4}. In the following we will show that any $Z$ satisfying \eqref{4.4} also satisfies \eqref{4.2}.
+
+\noindent If $||Z||_2\leq 1$, its projection onto anything will be no larger than 1, that is $||\Pi_{\mathcal{T}^{\prep}}(Z)||_2 \leq 1$. Furthermore, $Z$ can be decomposed into a part which is orthogonal to $A$ and part that is not, so if $M = UY^{T}+XV^{T}$ is the non-orthogonal part, $\langle Z,A \rangle = \langle M+W,A \rangle = \langle M,A \rangle \Rightarrow tr(Y^{T}XU)+tr(V^{T}AX) = ||A||_\star \Rightarrow X\propto U$ and $Y\propto V$. Thus we complete the proof.
+
+\end{proof}
+
+
+\end{document}
