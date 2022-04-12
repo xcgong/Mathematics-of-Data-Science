@@ -1,0 +1,198 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,latexsym}
+\usepackage{mathrsfs,mathtools}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage{bm}
+\usepackage{natbib}
+\usepackage{subfigure,multirow}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\usepackage[colorlinks,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+\usepackage{verbatim}
+
+\renewcommand\baselinestretch{1.25}
+\topmargin -.5in
+\textheight 9in
+\textwidth 6.6in
+\oddsidemargin -.25in
+\evensidemargin -.25in
+
+\title{Solutions to Homework 4}
+\author{Xiaochuan Gong}
+\date\today
+
+\begin{document}
+\maketitle
+
+\subsection*{Problem 1}
+Let $A$ be an $m\times n$ random matrix, and $A\sim \text{sub}\ G_{m\times n}(\sigma^2)$. Then, for any $t$, we have 
+\[
+||A||_2 \leq C\sigma(\sqrt{m}+\sqrt{n}+t)
+\]
+with probability at least $1-2\, \text{exp}(-t^2)$. 
+
+\noindent Before starting the proof, we first prove the following lemma. 
+\begin{lemma}
+    \label{L1}
+    Let $A$ be an $n\times n$ matrix and $\epsilon\in[0,\frac{1}{2})$. Show that for any $\epsilon$-net $\mathcal{N}$ of the sphere $S^{n-1}$ and any $\epsilon$-net $\mathcal{M}$ of the sphere $S^{m-1}$, we have 
+    \[
+    ||A||_2 \leq \frac{1}{1-2\epsilon} \cdot \sup\limits_{x\in\mathcal{N},\; y\in\mathcal{M}} \langle Ax,y \rangle.
+    \]
+\end{lemma}
+
+\begin{proof}
+To prove the upper bound, fix $x\in S^{n-1}$ and $y\in S^{m-1}$ such that 
+\[
+||A||_2 = \sup\limits_{u\in S^{n-1},\; v\in S^{m-1}}\langle Au,v \rangle = \langle Ax,y \rangle.
+\]
+Choose $x_0\in\mathcal{N}$ and $y_0\in\mathcal{M}$ so that 
+\[
+||x-x_0||_2 \leq \epsilon, \ ||y-y_0||_2 \leq \epsilon.
+\]
+By Cauchy-Schwarz inequality and the definition of spectral norm, we have the following:
+\begin{equation*}
+    \begin{aligned}
+        \langle Ax,y \rangle - \langle Ax_0,y_0 \rangle 
+        & = \langle Ax,y-y_0 \rangle + \langle A(x-x_0),y_0 \rangle \\
+        & \leq ||Ax||_2||y-y_0||_2 + ||A(x-x_0)||_2||y_0||_2 \\
+        & \leq ||A||_2||x||_2||y-y_0||_2 + ||A||_2||y_0||_2||x-x_0||_2 \\
+        & \leq 2\epsilon ||A||_2.
+    \end{aligned}
+\end{equation*}
+Note that $||A||_2=\langle Ax,y \rangle$, then we obtain $(1-2\epsilon)||A||_2 \leq \langle Ax_0,y_0 \rangle$. Dividing both sides of this inequality by $1-2\epsilon$ and take supremum over $x$ and $y$, we have 
+\[
+||A||_2 = \sup\limits_{u\in S^{n-1},\; v\in S^{m-1}}\langle Au,v \rangle = \langle Ax,y \rangle.
+\]
+\end{proof}
+
+\noindent Now we start to prove the problem.
+
+\begin{proof}
+%We need to control $u^{T}Av$ for all vectors $x$ and $y$ on the unit sphere. We will discretize the sphere using a net, establish a tight control of $u^{T}Av$ for fixed vectors $x$ and $y$ from the net, and finish by taking a union bound over all $x$ and $y$ in the net. 
+This proof is an example of an $\epsilon-net\ argument$. Choose $\epsilon=\frac{1}{4}$, using the inequality 
+\[
+\left(\frac{1}{\epsilon}\right)^n \leq \mathcal{N}(S^{n-1},||\cdot||_2,\epsilon) \leq \left(\frac{2}{\epsilon}+1\right)^n
+\]
+for covering numbers of the unit Euclidean sphere $S^{n-1}$, we can find an $\epsilon$-net $\mathcal{N}$ of the sphere $S^{n-1}$ and $\epsilon$-net $\mathcal{M}$ of the sphere $S^{m-1}$ with cardinalities
+\begin{equation}
+    \label{1}
+    |\mathcal{N}| \leq 9^n \quad \text{and} \quad |\mathcal{M}| \leq 9^m.
+\end{equation}
+Recall from lemma \ref{L1} that the spectral norm can be bounded using these nets as follows:
+\begin{equation}
+    \label{2}
+    ||A||_2 \leq 2 \max\limits_{x\in\mathcal{N},\; y\in\mathcal{M}} \langle Ax,y \rangle.
+\end{equation}
+Fix $x\in\mathcal{N}$ and $y\in\mathcal{M}$. Since $A\sim \text{sub}\ G_{m\times n}(\sigma^2)$, by definition, $\langle Ax,y \rangle \sim \text{sub}\ G(\sigma^2)$. Then for any $u\geq0$, we have the following tail bound:
+\begin{equation}
+    \label{3}
+    \mathbb{P}[\langle Ax,y \rangle \geq u] \leq \text{exp}(-\frac{u^2}{2\sigma^2}).
+\end{equation}
+Next, we unfix $x$ and $y$ using a union bound. Suppose the event $\max_{x\in\mathcal{N},\; y\in\mathcal{M}} \langle Ax,y \rangle \geq u$ occurs. Then there exist $x\in\mathcal{N}$ and $y\in\mathcal{M}$ such that $\langle Ax,y \rangle \geq u$. Thus the union bound yields
+\[
+\mathbb{P}\left\{\max\limits_{x\in\mathcal{N},\; y\in\mathcal{M}} \langle Ax,y \rangle \geq u\right\} \leq \sum\limits_{x\in\mathcal{N},\; y\in\mathcal{M}}\mathbb{P}\left\{\langle Ax,y \rangle \geq u\right\}
+\]
+Using the tail bound \eqref{3} and the estimate \eqref{1} on the sizes of $\mathcal{N}$ and $\mathcal{M}$, we can bound the above probability by 
+\begin{equation}
+    \label{4}
+    9^{m+n} \cdot \text{exp}(-\frac{u^2}{2\sigma^2})
+\end{equation}
+Choose $u=C\sigma(\sqrt{m}+\sqrt{n}+t)/2$, then $u^2 \geq C^2\sigma^2(m+n+t^2)/4$, and if the constant $C$ id chosen sufficiently large, say 
+\[
+\frac{u^2}{2\sigma^2} \geq \frac{C^2\sigma^2(m+n+t^2)}{8\sigma^2} \geq 3(m+n)+t^2-\text{ln}\ 2.
+\]
+Thus we can obtain
+\[
+\mathbb{P}\left\{\max\limits_{x\in\mathcal{N},\; y\in\mathcal{M}} \langle Ax,y \rangle \geq u\right\} \leq 9^{m+n} \cdot \text{exp}(-3(m+n)-t^2+\text{ln}\,2) \leq 2\,\text{exp}(-t^2).
+\]
+Finally, combining this with \eqref{2}, we conclude that
+\[
+\mathbb{P}\Bigg\{||A||_2 \geq 2u\Bigg\} \leq \mathbb{P}\left\{\max\limits_{x\in\mathcal{N},\; y\in\mathcal{M}} \langle Ax,y \rangle \geq u\right\} \leq 2\,\text{exp}(-t^2).
+\]
+Hence for any $t>0$, we have $||A||_2 \leq C\sigma(\sqrt{m}+\sqrt{n}+t)$ with probability at least $1-2\, \text{exp}(-t^2)$. 
+\end{proof}
+
+
+
+\subsection*{Problem 2}
+\textbf{(Johnson-Lindenstrauss)} For any $\epsilon\in (0,\frac{1}{2})$ and integer $m>4$, let $k=\frac{20\, \text{log}\, m}{\epsilon^2}$. Then for any set $V\subset\mathbb{R}^N$ of $m$ points, there exists a mapping $f : \mathbb{R}^N \rightarrow \mathbb{R}^k$ such that for all $\textbf{u}, \textbf{v}\in V$,
+\[
+(1-\epsilon)||\textbf{u}-\textbf{v}||^2 \leq ||f(\textbf{u})-f(\textbf{v})||^2 \leq (1+\epsilon)||\textbf{u}-\textbf{v}||^2.
+\]
+
+\noindent Before starting the proof, we first introduce two lemmas which will be used in the proof of the Johnson-Lindenstrauss lemma. 
+
+\begin{lemma}
+    \label{L2}
+    Let $Q$ be a random variable following a $\chi^2$-squared distribution with $k$ degrees of freedom. Then for any $\epsilon\in(0,\frac{1}{2})$, the following inequality holds:
+    \[
+    \mathbb{P}[(1-\epsilon)k \leq Q \leq (1+\epsilon)k] \geq 1-2e^{-(\epsilon^2-\epsilon^3)k/4}.
+    \]
+\end{lemma}
+
+\begin{proof}
+By Markov's inequality, we can write
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{P}[Q\geq(1+\epsilon)k] = \mathbb{P}[\text{exp}(\lambda Q)\geq \text{exp}(\lambda(1+\epsilon)k)] & \leq \frac{\mathbb{E}[\text{exp}(\lambda Q)]}{\text{exp}(\lambda(1+\epsilon)k)} \\
+        & = \frac{(1-2\lambda)^{-k/2}}{\text{exp}(\lambda(1+\epsilon)k)},
+    \end{aligned}
+\end{equation*}
+where we used for the final inequality the expression of the moment-generating function of a $\chi^2$-squared distribution, $\mathbb{E}[\text{exp}(\lambda Q)]$, for $\lambda < \frac{1}{2}$. Choosing $\lambda=\frac{\epsilon}{2(1+\epsilon)} < \frac{1}{2}$, which minimize the right-hand side of the final equality, and using the inequality $1+\epsilon \leq \text{exp}(\epsilon-(\epsilon^2-\epsilon^3)/2)$ yield
+\[
+\mathbb{P}[Q\geq(1+\epsilon)k] \leq \left(\frac{1+\epsilon}{\text{exp}(\epsilon)}\right)^{k/2} \leq \left(\frac{\text{exp}(\epsilon-\frac{\epsilon^2-\epsilon^2}{2})}{\text{exp}(\epsilon)}\right)^{k/2} = \text{exp}\left(-\frac{k}{4}(\epsilon^2-\epsilon^3)\right).
+\]
+By using similar techniques we can derive that
+\[
+\mathbb{P}[Q\leq(1-\epsilon)k] \leq \text{exp}\left(-\frac{k}{4}(\epsilon^2-\epsilon^3)\right).
+\]
+Then the statement of the lemma follows by applying the union bound
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{P}[(1-\epsilon)k \leq Q \leq (1+\epsilon)k] & = 1-\mathbb{P}[Q\leq(1-\epsilon)k]-\mathbb{P}[Q\geq(1+\epsilon)k] \\
+        & \geq 1-2e^{-(\epsilon^2-\epsilon^3)k/4}.
+    \end{aligned}
+\end{equation*}
+\end{proof}
+
+\begin{lemma}
+    \label{L3}
+    Let $\textbf{x}\in\mathbb{R}^N$, define $k<N$ and assume that entries in $\textbf{A}\in\mathbb{R}^{k\times N}$ are sampled independently from the standard normal distribution, $N(0,1)$. Then, for any $\epsilon\in(0,\frac{1}{2})$, we have
+    \[
+    \mathbb{P}\left[(1-\epsilon)||\textbf{x}||^2 \leq ||\frac{1}{\sqrt{k}}\textbf{Ax}||^2 \leq (1+\epsilon)||\textbf{x}||^2\right] \geq 1-2e^{-(\epsilon^2-\epsilon^3)k/4}.
+    \]
+\end{lemma}
+
+\begin{proof}
+Let $\hat{\textbf{x}}=\textbf{Ax}$ and observe that 
+\[
+\mathbb{E}[\hat x_j^2] = \mathbb{E}\left[\left(\sum\limmits_{i=1}^{N}A_{ji}x_i\right)^2\right] = \mathbb{E}\left[\sum\limits_{i=1}^{N}A_{ji}^2x_i^2\right] = \sum\limits_{i=1}^{N}x_i^2 = ||\textbf{x}||^2.
+\]
+The second and the third equalities follow from the independence and unit variance, respectively, of the $A_{ij}$. Now define $T_j=\hat{x_j}/||\textbf{x}||$ and note that the $T_j$s are independently standard normal random variables since the $A_{ij}$ are i.i.d standard normal random variables and $\mathbb{E}[\hat x_j^2] = ||\textbf{x}||^2$. Thus, the variable $Q$ defined by $Q=\sum\limits_{j=1}^{k}T_j^2$ follows a $\chi^2$-squared distribution with $k$ degrees of freedom and we have 
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{P}\left[(1-\epsilon)||\textbf{x}||^2 \leq \frac{||\hat{\textbf{x}}||^2}{k} \leq (1+\epsilon)||\textbf{x}||^2\right]
+        & = \mathbb{P}\left[(1-\epsilon)k \leq \sum\limits_{j=1}^{k}T_j^2 \leq (1+\epsilon)k\right] \\
+        & = \mathbb{P}\Bigg[(1-\epsilon)k \leq Q \leq (1+\epsilon)k\Bigg] \\
+        & \geq 1-2e^{-(\epsilon^2-\epsilon^3)k/4},
+    \end{aligned}
+\end{equation*}
+where the final inequality holds by lemma \ref{L2}, thus proving the statement of the lemma \ref{L3}.
+\end{proof}
+
+\noindent Now we start to prove the Johnson-Lindenstrauss lemma.
+
+\begin{proof}
+Let $f=\frac{1}{\sqrt{k}}\textbf{A}$ where $k<N$ and entries in $\textbf{A}\in\mathbb{R}^{k\times N}$ are sampled independently from the standard normal distribution, $N(0,1)$. For fixed $\textbf{u}, \textbf{v}\in V$, we can apply lemma \ref{L2}, with $\textbf{x}=\textbf{u}-\textbf{v}$, to lower  bound the success probability by $1-2e^{-(\epsilon^2-\epsilon^3)k/4}$. Note that there are $O(m^2)$ pairs of $\textbf{u}, \textbf{v}\in V$, applying the union bound over those $O(m^2)$ pairs in $V$, setting $k=\frac{20\, \text{log}\, m}{\epsilon^2}$ and $0<\epsilon<\frac{1}{2}$, we have
+\begin{equation*}
+    \begin{aligned}
+        & \mathbb{P}\Bigg[\exists \textbf{u},\textbf{v}\ \text{s.t. the following event fails: }(1-\epsilon)||\textbf{u}-\textbf{v}||^2 \leq ||f(\textbf{u})-f(\textbf{v})||^2 \leq (1+\epsilon)||\textbf{u}-\textbf{v}||^2\Bigg] \\
+        \leq & \sum_{\textbf{u},\textbf{v}\in V} \mathbb{P}\Bigg[\text{s.t. the following event fails: }(1-\epsilon)||\textbf{u}-\textbf{v}||^2 \leq ||f(\textbf{u})-f(\textbf{v})||^2 \leq (1+\epsilon)||\textbf{u}-\textbf{v}||^2\Bigg] \\
+        \leq &\ 2m^2e^{-(\epsilon^2-\epsilon^3)k/4} = 2m^{(5\epsilon-3)} \leq 2m^{-\frac{1}{2}} < 1.
+    \end{aligned}
+\end{equation*}
+Therefore, for all $\textbf{u}, \textbf{v}\in V$, we have $\mathbb{P}[success]>0$. Since the success probability is strictly greater than zero, a mapping that satisfies the desired conditions must exist, thus proving the statement of the lemma. 
+\end{proof}
+
+\end{document}
