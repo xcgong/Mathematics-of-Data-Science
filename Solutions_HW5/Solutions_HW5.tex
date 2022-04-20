@@ -1,0 +1,158 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,latexsym}
+\usepackage{mathrsfs,mathtools}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage{bm}
+\usepackage{natbib}
+\usepackage{subfigure,multirow}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\usepackage[colorlinks,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+\usepackage{verbatim}
+
+\renewcommand\baselinestretch{1.25}
+\topmargin -.5in
+\textheight 9in
+\textwidth 6.6in
+\oddsidemargin -.25in
+\evensidemargin -.25in
+
+\title{Solutions to Homework 5}
+\author{Xiaochuan Gong}
+\date\today
+
+\begin{document}
+\maketitle
+
+\subsection*{Problem 1}
+Consider the class of Lipschitz functions on the interval $[0,1]$ defined as 
+\[
+\mathcal{F}_L \coloneqq \left\{f : [0,1] \rightarrow \mathbb{R}\ |\ f(0)=0\ \text{and}\ |f(x)-f(x')|\leq L|x-x'| \quad \forall x,x'\in [0,1]\right\},
+\]
+equipped with the metric associated with the sup-norm
+\[
+d(f,f') \coloneqq \sup\limits_{x\in[0,1]}|f(x)-f(x')|.
+\]
+Prove that the metric entropy of the class $\mathcal{F}_L$ with respect to the sup-norm scales as
+\[
+\text{log}_2\,\mathcal{N}(\mathcal{F}_L,||\cdot||_{\infty},\epsilon) \asymp \frac{L}{\epsilon} \quad \text{for suitable small}\ \epsilon>0,
+\]
+where $\asymp$ denotes $\text{log}_2\,\mathcal{N}(\mathcal{F}_L,||\cdot||_{\infty},\epsilon)=O(\frac{L}{\epsilon})$ and $\frac{L}{\epsilon}=O(\text{log}_2\,\mathcal{N}(\mathcal{F}_L,||\cdot||_{\infty},\epsilon))$.
+
+\begin{proof}
+A typical method to this problem is to find an $\epsilon$-covering and a $2\epsilon$-packing of the class $\mathcal{F}_L$ consisting of the same number of elements $K_\epsilon$. Then we have 
+\[
+\mathcal{N}(\mathcal{F}_L,||\cdot||_{\infty},\epsilon) \leq K_\epsilon \quad \text{and} \quad \mathcal{P}(\mathcal{F}_L,||\cdot||_{\infty},2\epsilon) \geq K_\epsilon,
+\]
+and hence by applying the inequality
+\[
+\mathcal{P}(\mathcal{F}_L,||\cdot||_{\infty},2\epsilon) \leq \mathcal{N}(\mathcal{F}_L,||\cdot||_{\infty},\epsilon),
+\]
+we obtain 
+\[
+\mathcal{N}(\mathcal{F}_L,||\cdot||_{\infty},\epsilon) = \mathcal{P}(\mathcal{F}_L,||\cdot||_{\infty},2\epsilon) = K_\epsilon.
+\]\\
+
+\noindent\textbf{$\epsilon$-covering step:}
+We need to construct an $\epsilon$-covering of the metric space $(\mathcal{F}_L,||\cdot||_\infty)$. To do so, defining $n\coloneqq\lfloor\frac{1}{\epsilon}\rfloor$, we divide the interval $[0,1]$ into $n+1$ segments $I_k=[x_{k-1},x_k]$ for $k=1,2,\dots,n+1$ with
+\[
+x_k=k\epsilon, \quad \text{for}\ k=0,1,\dots,n, \quad \text{and} \quad x_{n+1}=1. 
+\]
+Moreover, we define the function $\Phi: \mathbb{R} \rightarrow \mathbb{R}$ via
+\begin{equation*}
+    \Phi(u)\coloneqq
+    \begin{cases}
+        0 & \text{for}\ u<0, \\
+        u & \text{for}\ 0\leq u\leq 1, \\
+        1 & \text{otherwise}.
+    \end{cases}
+\end{equation*}
+For each binary sequence $\beta\in \{-1,+1\}^n$, we may define a function $f_{\beta}:[0,1] \rightarrow [-L,L]$ via
+\[
+f_{\beta}(y) = \sum\limits_{k=1}^{n}\beta_kL\epsilon\Phi\left(\frac{y-x_k}{\epsilon}\right).
+\]
+By construction, each function is piecewise linear and continuous, with slope either $+L$ or $-L$ over each of the intervals $I_k$ for $k=2,\dots,n+1$, and constant on the remaining interval $I_1$, see Figure \ref{fig_1} for an illustration.
+\begin{figure}[htbp]
+\makebox[\textwidth][c]{
+\includegraphics[width=0.5\textwidth]{figures/fig_1.png}} 
+\caption{The function class $\{f_{\beta}\ |\ \beta\in\{-1,+1\}^n\}$ used to construct a covering of the class $\mathcal{F}_L$.}
+\label{fig_1}
+\end{figure}
+
+We first show that for any choice of $\beta$, $f_{\beta}\in\mathcal{F}_L$. It's obvious that $f_{\beta}(0)=0$. Without loss of generality, we let $y\in(x_p,x_{p+1}]$ and $y'\in(x_q,x_{q+1}]$ and $n\geq p>q\geq0$. By definition of $f_{\beta}$, we have
+\begin{equation*}
+    \begin{aligned}
+        |f_{\beta}(y)-f_{\beta}(y')| 
+        & = \left|\sum\limits_{k=1}^{p}\beta_kL\epsilon\Phi\left(\frac{y-x_k}{\epsilon}\right)-\sum\limits_{k=1}^{q}\beta_kL\epsilon\Phi\left(\frac{y-x_k}{\epsilon}\right)\right| \\
+        & = L\epsilon\left|\sum\limits_{k=q+1}^{p-1}\beta_k+\beta_p\left(\frac{y-x_p}{\epsilon}\right)+\beta_q\left(1-\frac{y'-x_q}{\epsilon}\right)\right| \\
+        & \leq L\epsilon\left(\sum\limits_{k=q+1}^{p-1}\left|\beta_k\right|+|\beta_p|\left(\frac{y-x_p}{\epsilon}\right)+|\beta_q|\left(1-\frac{y'-x_q}{\epsilon}\right)\right) \\
+        & = L\epsilon\left(p-q+\left(\frac{y-x_p}{\epsilon}\right)-\left(\frac{y'-x_q}{\epsilon}\right)\right) \\
+        & = L\epsilon\left(p-q-\left(\frac{x_p-x_q}{\epsilon}\right)+\left(\frac{y-y'}{\epsilon}\right)\right) \\
+        & = L|y-y'|.
+    \end{aligned}
+\end{equation*}
+Hence for all $\beta$, $f_{\beta}\in\mathcal{F}_L$.
+Next we will prove by induction on $K=1,\dots,n+1$ that for every $f\in\mathcal{F}_L$ there is a $\beta$ such that 
+\[
+\sup\limits_{x\in\bigcup\limits_{k=1}^{K}I_k}|f(x)-f_{\beta}(x)| \leq L\epsilon.
+\]
+
+For $K=1$, for any choice of $\beta$, we have $f_{\beta}(x)=0$, $\forall x\in[0,\epsilon]$. By $L$-Lipschitz assumption, for every $f\in\mathcal{F}_L$, we have
+\[
+|f(x)-f_{\beta}(x)| = |f(x)| = |f(x)-f(0)| \leq L|x-0| \leq L\epsilon,
+\]
+which proves the property for $K=1$.
+
+Assuming the property is satisfied up to some rank $K$, we consider the rank $K+1$. Given a function $f\in\mathcal{F}_L$, by induction hypothesis, let $\beta$ be such that
+\[
+\sup\limits_{x\in\bigcup\limits_{k=1}^{K}I_k}|f(x)-f_{\beta}(x)| \leq L\epsilon, \ \forall x\in[0,x_K].
+\]
+By $L$-Lipschitz assumption, $|f(x_{K+1})-f(x_K)|\leq L|x_{K+1}-x_K|= L\epsilon$. Then we have 
+\[
+f_{\beta}(x_K)-2L\epsilon \leq f(x_K)-L\epsilon \leq f(x_{K+1}) \leq f(x_K)+L\epsilon \leq f_{\beta}(x_K)+2L\epsilon.
+\]
+Thus, either $f(x_{K+1})\in[f_{\beta}(x_K)-2L\epsilon,f_{\beta}(x_K)]$ or $f(x_{K+1})\in[f_{\beta}(x_K),f_{\beta}(x_K)+2L\epsilon]$. We treat only the first case, the method being the same for the second one. We take $\beta$ such that the $K$-th term is -1(also note that we take $\beta$ such that the $K$-th term is 1 for the second case). Assume that we have some $x\in[x_K,x_{K+1}]$ such that $f(x)<f_{\beta}(x)-L\epsilon$, then
+\begin{equation*}
+    \begin{aligned}
+        f(x_K)-f(x) & > (f_{\beta}(x_K)-L\epsilon)-(f_{\beta}(x)-L\epsilon) \\
+                    & = f_{\beta}(x_K)-f_{\beta}(x) \\
+                    & = L(x-x_K),
+    \end{aligned}
+\end{equation*}
+which is a contradiction with the $L$-Lipschitz assumption on $f$. On the contrary, if there is some $x\in[x_K,x_{K+1}]$ such that $f(x)>f_{\beta}(x)+L\epsilon$, using $f(x_{K+1})\leq f_{\beta}(x_K)$, then
+\begin{equation*}
+    \begin{aligned}
+        f(x)-f(x_{K+1}) & > (f_{\beta}(x)+L\epsilon)-f_{\beta}(x_K) \\
+                        & = (f_{\beta}(x)+L\epsilon)-(f_{\beta}(x_{K+1})+L\epsilon) \\
+                        & = f_{\beta}(x)-f_{\beta}(x_{K+1}) \\
+                        & = L(x_{K+1}-x),
+    \end{aligned}
+\end{equation*}
+which is a contradiction with the $L$-Lipschitz assumption on $f$. Thus we have proven by induction that for all $K=1,\dots,n+1$, there is a $\beta$ such that such that $f_{\beta}$ is $L\epsilon$-close to a given $f$ on $[0,x_K]$. In particular, set $K=n+1$ and we conclude that the set of functions $\{f_{\beta}\ |\ \beta\in\{-1,+1\}^n\}$ is an $L\epsilon$-covering of the metric space $(\mathcal{F}_L,||\cdot||_\infty)$. Substituting $\frac{\epsilon}{L}$ for $\epsilon$, then we get an $\epsilon$-covering of the metric space $(\mathcal{F}_L,||\cdot||_\infty)$.\\
+
+\begin{figure}[htbp]
+\makebox[\textwidth][c]{
+\includegraphics[width=0.5\textwidth]{figures/fig_2.png}} 
+\caption{The function class $\{h_{\beta}\ |\ \beta\in\{-1,+1\}^n\}$ used to construct a packing of the class $\mathcal{F}_L$.}
+\label{fig_2}
+\end{figure}
+\noindent\textbf{$2\epsilon$-packing step:}
+We need to construct a $2\epsilon$-packing of the metric space $(\mathcal{F}_L,||\cdot||_\infty)$. To do so, for each binary sequence $\beta\in \{-1,+1\}^n$, we may define a function $h_{\beta}:[0,1] \rightarrow [-L,L]$ via
+\[
+h_{\beta}(y) = \sum\limits_{k=1}^{n}\beta_kL\epsilon\Phi\left(\frac{y-x_{k-1}}{\epsilon}\right).
+\]
+By construction, each function is piecewise linear and continuous, with slope either $+L$ or $-L$ over each of the intervals $I_k$ for $k=1,\dots,n$, and constant on the remaining interval $I_{n+1}$, see Figure \ref{fig_2} for an illustration. 
+
+By using the same method as in the $\epsilon$-covering step, we can verify that $h_{\beta}(0)=0$ and that $h_{\beta}\in\mathcal{F}_L$. Given a pair of distinct strings $\beta_1\neq\beta_2$ and the two associated functions $h_{\beta_1}$ and $h_{\beta_2}$, there is at least one interval $I_k$, with $1\leq k\leq n$, where the functions start at the same point, and have opposite slopes over $I_k$. Since the functions have slope $+L$ and $-L$ over $I_k$, respectively, we are guaranteed that $||h_{\beta_1}-h_{\beta_2}||_{\infty}\geq 2L\epsilon$, showing that the set $\left\{h_{\beta}\ |\ \beta\in\{-1,+1\}^n\right\}$ forms a $2L\epsilon$-packing of the metric space $(\mathcal{F}_L,||\cdot||_\infty)$. Substituting $\frac{\epsilon}{L}$ for $\epsilon$, then we get a $2\epsilon$-packing of the metric space $(\mathcal{F}_L,||\cdot||_\infty)$.\\
+
+We have constructed an $\epsilon$-covering and a $2\epsilon$-packing of the metric space $(\mathcal{F}_L,||\cdot||_\infty)$, both of cardinality $K_\epsilon=2^n=2^{\lfloor\frac{L}{\epsilon}\rfloor}$. Therefore, using the following inequality
+\[
+K_\epsilon \leq \mathcal{P}(\mathcal{F}_L,||\cdot||_{\infty},2\epsilon) \leq \mathcal{N}(\mathcal{F}_L,||\cdot||_{\infty},\epsilon) \leq K_\epsilon,
+\]
+then we obtain
+\[
+\text{log}_2\,\mathcal{N}(\mathcal{F}_L,||\cdot||_{\infty},\epsilon) \asymp \frac{L}{\epsilon}.
+\]
+\end{proof}
+\end{document}
