@@ -1,0 +1,172 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,latexsym}
+\usepackage{mathrsfs,mathtools}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage{bm}
+\usepackage{natbib}
+\usepackage{subfigure,multirow}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\usepackage[colorlinks,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+\usepackage{verbatim}
+
+\renewcommand\baselinestretch{1.25}
+\topmargin -.5in
+\textheight 9in
+\textwidth 6.6in
+\oddsidemargin -.25in
+\evensidemargin -.25in
+
+\title{Solutions to Homework 7}
+\author{Xiaochuan Gong}
+\date\today
+
+\begin{document}
+\maketitle
+
+\subsection*{Problem 1}
+Assume $\nabla f\in\text{Lip}(L)$ and $f$ is strongly convex with parameter $m$, prove that gradient descent with step size $\delta_k=\frac{2}{L+m}$ satisfies 
+\[
+f(x_k)-f(z)+\frac{m}{2}||x_k-z||^2 \leq \left(\frac{L-m}{L+m}\right)^k\left(f(x_0)-f(z)+\frac{m}{2}||x_0-z||^2\right),\ \forall z.
+\]
+
+
+\begin{proof}
+First, since $\nabla f\in\text{Lip}(L)$, we have 
+\begin{equation}
+    \label{1}
+    f(y) \leq f(x)+\langle\nabla f(x),y-x\rangle+\frac{L}{2}||y-x||^2,\ \forall x,y\in\mathbb{R}^d. 
+\end{equation}
+We let $y=x-\frac{2}{L+m}\nabla f(x)$ and plug $y$ in \eqref{1}, we get
+\begin{equation}
+    \label{2}
+    f(y) \leq f(x)-\frac{2m}{(L+m)^2}||\nabla f(x)||^2.
+\end{equation}
+Also recall that if $f$ is strongly convex with parameter $m$, there exists
+\begin{equation}
+    \label{3}
+    f(y) \geq f(x)+\langle\nabla f(x),y-x\rangle+\frac{m}{2}||y-x||^2,\ \forall x,y\in\mathbb{R}^d. 
+\end{equation}
+For any $z\in\mathbb{R}^d$, we have
+\begin{equation*}
+    \begin{aligned}
+        \frac{m}{2}||y-z||^2
+        & = \frac{m}{2}||x-\frac{2}{L+m}\nabla f(x)-z||^2 \\
+        & = \frac{m}{2}||x-z||^2 - \frac{2m}{L+m}\langle\nabla f(x),x-z\rangle + \frac{2m}{(L+m)^2}||\nabla f(x)||^2 \\
+        & \leq \frac{m}{2}||x-z||^2 + \frac{2m}{m+L}\left[f(z)-f(x)-\frac{m}{2}||z-x||^2\right] + \frac{2m}{(L+m)^2}\cdot\frac{(L+m)^2}{2m}(f(x)-f(y)) \\
+        & = \frac{m(L-m)}{2(L+m)}||x-z||^2 - \frac{2}{L+m}(f(x)-f(z)) + f(x)-f(y), \\
+    \end{aligned}   
+\end{equation*}
+where  we use \eqref{2} and \eqref{3} to derive the inequality step. Then we add $f(y)-f(z)$ to both sides of the above inequality, we obtain
+\[
+f(y)-f(z)+\frac{m}{2}||y-z||^2 \leq \left(\frac{L-m}{L+m}\right)\left(f(x)-f(z)+\frac{m}{2}||x-z||^2\right),\ \forall z.
+\]
+Set $x=x_{i-1}$, $y=x_i$ for $i=1,\dots,k$ and by recursion we get
+\[
+f(x_k)-f(z)+\frac{m}{2}||x_k-z||^2 \leq \left(\frac{L-m}{L+m}\right)^k\left(f(x_0)-f(z)+\frac{m}{2}||x_0-z||^2\right),\ \forall z.
+\]
+\end{proof}
+
+\subsection*{Problem 2}
+Assume $\nabla f\in\text{Lip}(L)$ and $f$ is strongly convex with parameter $m$. Prove the following convergence rates. \\
+\noindent (a)\ For gradient flow $\frac{d}{dt}X_t=-\nabla f(X_t)$, let $\mathcal{E}_t=e^{\frac{2mL}{m+L}}\frac{1}{2}||x^*-X_t||^2$ be the Lyapunov function, then we have $f(X_t)-f(x^*)\leq O(\frac{L}{2}e^{-\frac{2mL}{m+L}t})$. \\
+\noindent (b)\ For gradient descent $\frac{x_{k+1}-x_k}{\delta}=-\nabla f(x_k)$ with $0<\delta\leq\frac{2}{m+L}$, let $E_k=\left(1-\frac{2mL}{(m+L)}\delta\right)^{-k}\frac{1}{2}||x^*-x_k||^2$ be the Lyapunov function, then we have $f(x_k)-f(x^*)\leq O(\frac{L}{2}e^{-\frac{2mL}{(m+L)}\delta k})$.
+
+\begin{proof}
+(a)\ First, $\nabla f\in\text{Lip}(L)$ and $f$ is $m$-strongly convex ($m\leq L$), we have
+\begin{equation}
+    \label{4}
+    \langle \nabla f(X_t),x^*-X_t \rangle \leq -\frac{mL}{m+L}||x^*-X_t||^2-\frac{1}{m+L}||\nabla f(X_t)||^2.
+\end{equation}
+We provide a proof of this bound in the Appendix \ref{A}. Using \eqref{4}, it follows that 
+\begin{equation*}
+    \begin{aligned}
+        \frac{d}{dt}\mathcal{E}_t 
+        & = e^{\frac{2mL}{m+L}t}\left(\frac{mL}{m+L}||x^*-X_t||^2-\langle\frac{d}{dt}X_t,x^*-X_t\rangle\right) \\
+        & = e^{\frac{2mL}{m+L}t}\left(\frac{mL}{m+L}||x^*-X_t||^2+\langle\nabla f(X_t),x^*-X_t\rangle\right) \\
+        & = e^{\frac{2mL}{m+L}t}\left(\frac{mL}{m+L}||x^*-X_t||^2-\frac{mL}{m+L}||x^*-X_t||^2-\frac{1}{m+L}||\nabla f(X_t)||^2\right) \\
+        & \leq 0.
+    \end{aligned}
+\end{equation*}
+By integrating, we obtain the statement 
+\[
+\mathcal{E}_t-\mathcal{E}_0 = \int_{0}^{t}\frac{d}{dt}\mathcal{E}_sds \leq 0.
+\]
+Thus we have
+\[
+\frac{1}{2}||x^*-X_t||^2 \leq e^{-\frac{2mL}{m+L}t}\mathcal{E}_0.
+\]
+In addition, by the property of $L$-smoothness \eqref{1}, we can subsequently conclude the upper bound for the optimality gap as follows:
+\begin{equation*}
+    \begin{aligned}
+        f(X_t)-f(x^*) & \leq \langle\nabla f(x^*),X_t-x^*\rangle+\frac{1}{2}L||x^*-X_t||^2 \\
+                      & = \frac{1}{2}L||x^*-X_t||^2 \\
+                      & \leq e^{-\frac{2mL}{m+L}t}\frac{L}{2}||x^*-X_0||^2.
+    \end{aligned}
+\end{equation*}
+Hence we obtain $f(X_t)-f(x^*)\leq O(\frac{L}{2}e^{-\frac{2mL}{m+L}t})$.
+% We let $\frac{d}{dt}\mathcal{E}_t \leq 0$ and we get 
+% \[
+% \frac{1}{2}||x^*-X_t||^2 \leq e^{\frac{2mL}{m+L}t}\mathcal{E}_0
+% \]
+% and an $O(e^{\frac{2mL}{m+L}t})$ convergence rate. In addition, smoothness can be used to conclude a tighter bound on the convergence of the optimal gap using this tighter bound,
+% \[
+% f(X_t)-f(x^*) \leq \frac{L}{2}||x^*-X_t||^2 \leq e^{-\frac{2mL}{m+L}t}\frac{L}{2}||x^*-X_0||^2.
+% \]
+\\
+
+\noindent (b)\ For gradient descent, as long as the function is $L$-smooth and $m$-strongly convex, where $\delta\leq\frac{2}{m+L}$, the following function, 
+\[
+E_k = \left(1-\frac{2mL}{(m+L)}\delta\right)^{-k}\frac{1}{2}||x^*-x_k||^2,
+\]
+is a Lyapunov function. We check,
+\begin{equation*}
+    \begin{aligned}
+        \frac{E_{k+1}-E_k}{\delta}
+        & = \left(1-\frac{2mL}{(m+L)}\delta\right)^{-(k+1)}\frac{1}{\delta}\left[\frac{1}{2}||x^*-x_{k+1}||^2-\frac{1}{2}\left(1-\frac{2mL}{m+L}\delta\right)||x^*-x_k||^2\right] \\
+        & = \left(1-\frac{2mL}{(m+L)}\delta\right)^{-(k+1)}\left[\frac{\left(\frac{1}{2}||x^*-x_{k+1}||^2-\frac{1}{2}||x^*-x_{k}||^2\right)}{\delta}+\frac{mL}{m+L}||x^*-x_k||^2\right] \\
+        & = \left(1-\frac{2mL}{(m+L)}\delta\right)^{-(k+1)}\left(-\langle\frac{x_{k+1}-x_k}{\delta},x^*-x_k\rangle+\varepsilon_k^1+\frac{mL}{m+L}||x^*-x_k||^2\right) \\
+        & = \left(1-\frac{2mL}{(m+L)}\delta\right)^{-(k+1)}\left(\langle\nabla f(x_k),x^*-x_k\rangle+\varepsilon_k^1+\frac{mL}{m+L}||x^*-x_k||^2\right) \\
+        & \leq \left(1-\frac{2mL}{(m+L)}\delta\right)^{-(k+1)}\left(-\frac{mL}{m+L}||x^*-x_k||^2+\varepsilon_k^2+\frac{mL}{m+L}||x^*-x_k||^2\right) \\
+        & = \left(1-\frac{2mL}{(m+L)}\delta\right)^{-(k+1)}\varepsilon_k^2 \\
+        & \leq 0,
+    \end{aligned}
+\end{equation*}
+where $\varepsilon_k^1=\frac{\delta}{2}||\nabla f(x_k)||^2$ and $\varepsilon_k^2=-\left(\frac{1}{m+L}-\frac{\delta}{2}\right)||\nabla f(x_k)||^2$. We also use \eqref{4} to derive the first inequality. Since we take $\delta\in\left(0,\frac{2}{m+L}\right]$, then $\varepsilon_k^2\leq0$. By summing, we obtain the statement $E_k-E_0\leq\sum_{i=0}^{k}\frac{E_{i+1}-E_i}{\delta}\delta\leq0$, thus we have
+\[
+\frac{1}{2}||x^*-x_k||^2 \leq \left(1-\frac{2mL}{(m+L)}\delta\right)^{k}E_0.
+\]
+In addition, by the property of $L$-smoothness \eqref{1}, we can subsequently conclude the upper bound for the optimality gap as follows:
+\begin{equation*}
+    \begin{aligned}
+        f(x_k)-f(x^*) & \leq \langle\nabla f(x^*),x_k-x^*\rangle+\frac{1}{2}L||x^*-x_k||^2 \\
+                      & = \frac{1}{2}L||x^*-x_k||^2 \\
+                      & \leq e^{-\frac{2mL}{m+L}\delta k}\frac{L}{2}||x^*-x_0||^2.
+    \end{aligned}
+\end{equation*}
+Hence we obtain $f(x_k)-f(x^*)\leq O(\frac{L}{2}e^{-\frac{2mL}{m+L}\delta k})$. 
+% In particular, if we choose $\delta=\frac{2}{m+L}$, then we have $f(x_k)-f(x^*)\leq O(\frac{L}{2}e^{-\frac{4mLk}{(m+L)^2}})$.
+\end{proof}
+
+\section{Appendix}\label{A}
+We provide a proof of inequality \eqref{4} there.
+\begin{proof}
+Define $\phi(x)=f(x)-\frac{m}{2}||x||^2$ and note $\nabla\phi(x)=\nabla f(x)-mx$. Since $f$ if $L$-smooth, then $\langle\nabla f(x)-\nabla f(y),x-y\rangle \leq L||x-y||^2$, and this implies $\langle\nabla\phi(x)-\nabla\phi(y),x-y\rangle \leq (L-m)||x-y||^2$. Thus $\phi$ is $(L-m)$-smooth. This, in turn, implies
+\[
+\langle\nabla\phi(x)-\nabla\phi(y),x-y\rangle \geq \frac{1}{L-m}||\nabla\phi(x)-\nabla\phi(y)||^2.
+\]
+Expanding the above inequality, and we obtain
+\[
+\langle\nabla f(x)-\nabla f(y),x-y\rangle \geq \frac{mL}{m+L}||x-y||^2+\frac{1}{m+L}||\nabla f(x)-\nabla f(y)||^2.
+\]
+Let $x=X_t$, $y=x^*$, and note $\nabla f(x^*)=0$, then we get
+\[
+\langle\nabla f(X_t),X_t-x^*\rangle \geq \frac{mL}{m+L}||X_t-x^*||^2+\frac{1}{m+L}||\nabla f(X_t)||^2.
+\]
+Multiply both sides by -1 and we obtain the inequality \eqref{4}.
+\end{proof}
+
+
+
+\end{document}
