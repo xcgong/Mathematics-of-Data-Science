@@ -1,0 +1,120 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,latexsym}
+\usepackage{mathrsfs,mathtools}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage{bm}
+\usepackage{natbib}
+\usepackage{subfigure,multirow}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\usepackage[colorlinks,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+\usepackage{verbatim}
+
+\renewcommand\baselinestretch{1.25}
+\topmargin -.5in
+\textheight 9in
+\textwidth 6.6in
+\oddsidemargin -.25in
+\evensidemargin -.25in
+
+\title{Solutions to Homework 6}
+\author{Xiaochuan Gong}
+\date\today
+
+\begin{document}
+\maketitle
+
+\subsection*{Problem 1}
+Let $X=$
+\begin{pmatrix}
+    Y \\
+    Z
+\end{pmatrix}
+$\sim \mathcal{N}(\mu,\Sigma)$ with $\mu=$
+\begin{bmatrix}
+    \mu_y \\
+    \mu_z
+\end{bmatrix}
+, $\Sigma=$
+\begin{pmatrix}
+    \Sigma_{yy} & \Sigma_{yz} \\
+    \Sigma_{zy} & \Sigma_{zz}
+\end{pmatrix}
+$\succcurlyeq 0$, then $Z|Y \sim \mathcal{N}(\mu_{z|y},\Sigma_{z|y})$ with
+\begin{equation}
+    \label{1}
+    \begin{aligned}
+        & \mu_{z|y} = \mu_z + \Sigma_{zy}\Sigma_{yy}^{-1}(y-\mu_y), \\
+        & \Sigma_{z|y} = \Sigma_{zz} - \Sigma_{zy}\Sigma_{yy}^{-1}\Sigma_{yz}.
+    \end{aligned}
+\end{equation}
+
+
+\begin{proof}
+We first assume that $Y$ is an $n_1\times 1$ vector, $Z$ is an $n_2\times 1$ vector and $X$ is an $n\times 1$ vector, where $n=n_1+n_2$. By construction, the joint distribution of $Y$ and $Z$ is $\mathcal{N}(\mu,\Sigma)$. Moreover, the marginal distribution of $Y$ is $\mathcal{N}(\mu_y,\Sigma_{yy})$. According to the law of conditional probability, it holds that
+\[
+p(z|y) = \frac{p(z,y)}{p(y)}.
+\]
+Since we have 
+\[
+p(z|y) = \frac{\mathcal{N}(x;\mu,\Sigma)}{\mathcal{N}(y;\mu_y,\Sigma_{yy})},
+\]
+and then we can use the probability density function of the multivariate normal distribution, this becomes:
+\begin{equation}
+    \label{2}
+    \begin{aligned}
+        p(z|y) & = \frac{\frac{1}{\sqrt{(2\pi)^{n}|\Sigma|}}\cdot\text{exp}\left[-\frac{1}{2}(x-\mu)^{T}\Sigma^{-1}(x-\mu)\right]}{\frac{1}{\sqrt{(2\pi)^{n_1}|\Sigma_{yy}|}}\cdot\text{exp}\left[-\frac{1}{2}(y-\mu_y)^{T}\Sigma_{yy}^{-1}(y-\mu_y)\right]} \\
+        & = \frac{1}{\sqrt{(2\pi)^{n-n_1}}}\cdot\sqrt{\frac{|\Sigma_{yy}|}{|\Sigma|}}\cdot\text{exp}\left[-\frac{1}{2}(x-\mu)^{T}\Sigma^{-1}(x-\mu)+\frac{1}{2}(y-\mu_y)^{T}\Sigma_{yy}^{-1}(y-\mu_y)\right].
+    \end{aligned}
+\end{equation}
+Write the inverse of $\Sigma$ as 
+\[
+\Sigma^{-1} = 
+\begin{bmatrix}
+    (\Sigma_{yy}-\Sigma_{yz}\Sigma_{zz}^{-1}\Sigma_{zy})^{-1} & -(\Sigma_{yy}-\Sigma_{yz}\Sigma_{zz}^{-1}\Sigma_{zy})^{-1}\Sigma_{yz}\Sigma_{zz}^{-1} \\
+    -\Sigma_{zz}^{-1}\Sigma_{zy}(\Sigma_{yy}-\Sigma_{yz}\Sigma_{zz}^{-1}\Sigma_{zy})^{-1} & \Sigma_{zz}^{-1}+\Sigma_{zz}^{-1}\Sigma_{zy}(\Sigma_{yy}-\Sigma_{yz}\Sigma_{zz}^{-1}\Sigma_{zy})^{-1}\Sigma_{yz}\Sigma_{zz}^{-1} \\
+\end{bmatrix}
+\triangleq
+\begin{bmatrix}
+    \Sigma^{11} & \Sigma^{12} \\
+    \Sigma^{21} & \Sigma^{22}
+\end{bmatrix}
+\]
+and plugging this into \eqref{2}, we have 
+\begin{equation*}
+    \begin{aligned}
+        p(z|y) & = \frac{1}{\sqrt{(2\pi)^{n-n_1}}}\cdot\sqrt{\frac{|\Sigma_{yy}|}{|\Sigma|}}\cdot\text{exp}\left[-\frac{1}{2}(x-\mu)^{T}\Sigma^{-1}(x-\mu)+\frac{1}{2}(y-\mu_y)^{T}\Sigma_{yy}^{-1}(y-\mu_y)\right] \\
+        & = 
+        \begin{split}
+            & \frac{1}{\sqrt{(2\pi)^{n-n_1}}}\cdot\sqrt{\frac{|\Sigma_{yy}|}{|\Sigma|}}\cdot\text{exp}\bigg\{-\frac{1}{2}\left[(y-\mu_y)^{T}\Sigma^{11}(y-\mu_y)+2(y-\mu_y)^{T}\Sigma^{12}(z-\mu_z) \\
+            & +(z-\mu_z)^{T}\Sigma^{22}(z-\mu_z)\right]+\frac{1}{2}(y-\mu_y)^{T}\Sigma_{yy}^{-1}(y-\mu_y)\bigg\}
+        \end{split} \\
+        & = 
+        \begin{split}
+            & \frac{1}{\sqrt{(2\pi)^{n-n_1}}}\cdot\sqrt{\frac{|\Sigma_{yy}|}{|\Sigma|}}\cdot\text{exp}\bigg\{-\frac{1}{2}\left[z-(\mu_z+\Sigma_{zy}^{T}\Sigma_{yy}^{-1}(y-\mu_y))\right]^{T}(\Sigma_{zz}-\Sigma_{zy}\Sigma_{yy}^{-1}\Sigma_{yz})^{-1} \\
+            & \left[z-(\mu_z+\Sigma_{zy}^{T}\Sigma_{yy}^{-1}(y-\mu_y))\right]\bigg\}, 
+        \end{split}
+    \end{aligned}
+\end{equation*}
+where we use the fact that $\Sigma_{zy}^{T}=\Sigma_{yz}$ and that ${\Sigma^{21}}^{T}=\Sigma^{12}$ since both $\Sigma$ and $\Sigma^{-1}$ are symmetric matrices.
+Note that the determinant of $\Sigma$ is
+\[
+|\Sigma| = 
+\begin{vmatrix}
+    \Sigma_{yy} & \Sigma_{yz} \\
+    \Sigma_{zy} & \Sigma_{zz} 
+\end{vmatrix}
+= |\Sigma_{yy}|\cdot|\Sigma_{zz}-\Sigma_{zy}\Sigma_{yy}^{-1}\Sigma_{yz}|.
+\]
+With this and $n=n_1+n_2$, we finally arrive at
+\[
+\begin{split}
+    p(z|y) = 
+    & \frac{1}{\sqrt{(2\pi)^{n_2}|\Sigma_{zz}-\Sigma_{zy}\Sigma_{yy}^{-1}\Sigma_{yz}|}}\cdot\text{exp}\bigg\{-\frac{1}{2}\left[z-(\mu_z+\Sigma_{zy}^{T}\Sigma_{yy}^{-1}(y-\mu_y))\right]^{T}(\Sigma_{zz}-\Sigma_{zy}\Sigma_{yy}^{-1}\Sigma_{yz})^{-1} \\
+    & \left[z-(\mu_z+\Sigma_{zy}^{T}\Sigma_{yy}^{-1}(y-\mu_y))\right]\bigg\}, 
+\end{split}
+\]
+which is exactly the density function of a multivariate normal distribution $\mathcal{N}(\mu_{z|y},\Sigma_{z|y})$. 
+\end{proof}
+\end{document}
